@@ -5,7 +5,7 @@ on:
     inputs:
       config:
         description: |
-          Path of your JSON configurtion file.
+          Path to your JSON configurtion file.
           Example: `./.github/deploy/dev.json`
         type: string
         required: true
@@ -28,5 +28,5 @@ jobs:
         id: set-matrix-config
         shell: pwsh
         run: |
-          $deployConfig = Get-Content -Path "${{ inputs.config }}" | ConvertFrom-Json | ConvertTo-Json -Compress
-          Write-Output "matrix=$($deployConfig)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
+          $matrixConfig = Get-Content -Path "${{ inputs.config }}" | ConvertFrom-Json | ConvertTo-Json -Compress
+          Write-Output "matrix=$($matrixConfig)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
