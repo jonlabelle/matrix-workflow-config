@@ -1,0 +1,32 @@
+name: Matrix config
+
+on:
+  workflow_call:
+    inputs:
+      config:
+        description: |
+          Path of your JSON configurtion file.
+          Example: `./.github/deploy/dev.json`
+        type: string
+        required: true
+    outputs:
+      matrix:
+        description: |
+          A JSON escaped string that can be used as a job's [matrix strategy](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs) configuration.
+          Be sure to convert this stringified JSON to a JSON object (using `fromJson()` expression) when injecting into your job's stategy matrix.
+        value: ${{ jobs.matrix-config.outputs.matrix }}
+
+jobs:
+  matrix-config:
+    runs-on: windows-latest
+    outputs:
+      matrix: ${{ steps.set-matrix-config.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set deploy matrix
+        id: set-matrix-config
+        shell: pwsh
+        run: |
+          $deployConfig = Get-Content -Path "${{ inputs.config }}" | ConvertFrom-Json | ConvertTo-Json -Compress
+          Write-Output "matrix=$($deployConfig)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append

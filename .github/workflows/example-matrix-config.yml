@@ -1,0 +1,33 @@
+name: Example using matrix config
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  matrix-config:
+    uses: ./.github/workflows/ru-matrix-config.yml
+    with:
+      config: ./.github/matrix-config/example.json
+
+  example-usage:
+    name: Use matrix config
+    needs: [matrix-config]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.matrix-config.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - run: echo ${{ matrix.label }}
+        if: ${{ matrix.enable }}
+      - run: echo ${{ matrix.server-name }}
+        if: ${{ matrix.enable }}
+      - run: echo ${{ matrix.root-unc-path }}
+        if: ${{ matrix.enable }}
+      - run: echo ${{ matrix.local-root-path }}
+        if: ${{ matrix.enable }}
+      - run: echo ${{ matrix.iis-path }}
+        if: ${{ matrix.enable }}
+      - run: echo ${{ matrix.enable }}
+        if: ${{ matrix.enable }}
