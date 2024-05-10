@@ -1,12 +1,23 @@
+/**
+ * I get removed before parsing
+ *
+ * Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+ * tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+ * quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+ * consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+ * cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+ * proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+ */
 {
   "include": [
     {
+      // Some random comments that get removed
       "label": "My first deploy target",
       "server-name": "server.name1",
       "root-unc-path": "\\\\server.name\\E$\\www\\public",
       "local-root-path": "E:\\www\\public",
       "iis-path": "IIS:\\Sites\\Default Web Site",
-      "enable": true
+      "enable": true // inline comment that gets removed
     },
     {
       "label": "My second deploy target",
@@ -16,6 +27,7 @@
       "iis-path": "IIS:\\Sites\\Mysite\\MyApp",
       "enable": true
     },
+    // Comment between items
     {
       "label": "I am configured, but not enabled. So I will not be run.",
       "server-name": "server.name3",
@@ -24,5 +36,6 @@
       "iis-path": "IIS:\\Sites\\Broken site",
       "enable": false
     }
-  ]
+  ] // Random comment
 }
+// Dangling comment

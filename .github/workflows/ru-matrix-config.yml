@@ -28,5 +28,27 @@ jobs:
         id: set-matrix-config
         shell: pwsh
         run: |
-          $matrix = Get-Content -Path "${{ inputs.config }}" -Raw | ConvertFrom-Json | ConvertTo-Json -Compress
+          function Remove-Comments {
+            param(
+              [CmdletBinding()]
+              [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
+              [string]
+              $String
+            )
+            process {
+              # Regex pattern based on https://github.com/diversen/remove-comments-regex/blob/master/index.js
+              $commentsPattern = '\/\*[\s\S]*?\*\/|\/\/.*$'
+
+              $blankLinesPattern = '^(?:[\t ]*(?:\r?\n|\r))+'
+              $trailingWhitespace = '[ \t]+$'
+
+              $String = [regex]::Replace($String, $commentsPattern, '', 'MultiLine')
+              $String = [regex]::Replace($String, $blankLinesPattern, '', 'MultiLine')
+              $String = [regex]::Replace($String, $trailingWhitespace, '', 'MultiLine')
+
+              return $String
+            }
+          }
+
+          $matrix = Get-Content -Path "${{ inputs.config }}" -Raw | Remove-Comments | ConvertFrom-Json | ConvertTo-Json -Compress
           Write-Output "matrix=$($matrix)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
