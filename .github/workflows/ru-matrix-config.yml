@@ -36,9 +36,7 @@ jobs:
               $String
             )
             process {
-              # Regex pattern based on https://github.com/diversen/remove-comments-regex/blob/master/index.js
               $commentsPattern = '\/\*[\s\S]*?\*\/|\/\/.*$'
-
               $blankLinesPattern = '^(?:[\t ]*(?:\r?\n|\r))+'
               $trailingWhitespace = '[ \t]+$'
 
