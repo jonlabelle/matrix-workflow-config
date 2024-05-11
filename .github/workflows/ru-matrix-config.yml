@@ -36,13 +36,13 @@ jobs:
               $String
             )
             process {
-              $commentsPattern = '\/\*[\s\S]*?\*\/|\/\/.*$'
-              $blankLinesPattern = '^(?:[\t ]*(?:\r?\n|\r))+'
-              $trailingWhitespace = '[ \t]+$'
+              $comments = '\/\*[\s\S]*?\*\/|\/\/.*$'
+              $emptyLines = '^(?:[\t ]*(?:\r?\n|\r))+'
+              $trailingWs = '[ \t]+$'
 
-              $String = [regex]::Replace($String, $commentsPattern, '', 'MultiLine')
-              $String = [regex]::Replace($String, $blankLinesPattern, '', 'MultiLine')
-              $String = [regex]::Replace($String, $trailingWhitespace, '', 'MultiLine')
+              $String = [regex]::Replace($String, $comments, '', 'MultiLine')
+              $String = [regex]::Replace($String, $emptyLines, '', 'MultiLine')
+              $String = [regex]::Replace($String, $trailingWs, '', 'MultiLine')
 
               return $String
             }
