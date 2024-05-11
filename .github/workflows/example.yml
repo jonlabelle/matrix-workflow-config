@@ -7,7 +7,7 @@ on:
 
 jobs:
   matrix-config:
-    uses: ./.github/workflows/ru-matrix-config.yml
+    uses: ./.github/workflows/matrix-config.yml
     with:
       config: ./.github/matrix-config/example.json
 
