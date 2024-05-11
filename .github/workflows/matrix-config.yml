@@ -40,9 +40,9 @@ jobs:
               $emptyLines = '^(?:[\t ]*(?:\r?\n|\r))+'
               $trailingWs = '[ \t]+$'
 
-              $String = [regex]::Replace($String, $comments, '', 'MultiLine')
-              $String = [regex]::Replace($String, $emptyLines, '', 'MultiLine')
-              $String = [regex]::Replace($String, $trailingWs, '', 'MultiLine')
+              $String = [Regex]::Replace($String, $comments, '', 'MultiLine')
+              $String = [Regex]::Replace($String, $emptyLines, '', 'MultiLine')
+              $String = [Regex]::Replace($String, $trailingWs, '', 'MultiLine')
 
               return $String
             }
