@@ -33,18 +33,18 @@ jobs:
               [CmdletBinding()]
               [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
               [string]
-              $String
+              $Json
             )
             process {
               $comments = '\/\*[\s\S]*?\*\/|\/\/.*$'
               $emptyLines = '^(?:[\t ]*(?:\r?\n|\r))+'
               $trailingWs = '[ \t]+$'
 
-              $String = [Regex]::Replace($String, $comments, '', 'MultiLine')
-              $String = [Regex]::Replace($String, $emptyLines, '', 'MultiLine')
-              $String = [Regex]::Replace($String, $trailingWs, '', 'MultiLine')
+              $Json = [Regex]::Replace($Json, $comments, '', 'MultiLine')
+              $Json = [Regex]::Replace($Json, $emptyLines, '', 'MultiLine')
+              $Json = [Regex]::Replace($Json, $trailingWs, '', 'MultiLine')
 
-              return $String
+              return $Json
             }
           }
 
