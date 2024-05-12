@@ -28,5 +28,5 @@ jobs:
         id: set-matrix
         shell: pwsh
         run: |
-          $matrix = Get-Content -Path "${{ inputs.config }}" -Raw | Remove-Comments | ConvertFrom-Json | ConvertTo-Json -Compress
+          $matrix = Get-Content -Path "${{ inputs.config }}" -Raw | ConvertFrom-Json | ConvertTo-Json -Compress
           Write-Output "matrix=$($matrix)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
