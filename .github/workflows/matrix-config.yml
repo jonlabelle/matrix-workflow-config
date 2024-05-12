@@ -28,25 +28,5 @@ jobs:
         id: set-matrix
         shell: pwsh
         run: |
-          function Remove-Comments {
-            param(
-              [CmdletBinding()]
-              [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
-              [string]
-              $Json
-            )
-            process {
-              $comments = '\/\*[\s\S]*?\*\/|\/\/.*$'
-              $emptyLines = '^(?:[\t ]*(?:\r?\n|\r))+'
-              $trailingWs = '[ \t]+$'
-
-              $Json = [Regex]::Replace($Json, $comments, '', 'MultiLine')
-              $Json = [Regex]::Replace($Json, $emptyLines, '', 'MultiLine')
-              $Json = [Regex]::Replace($Json, $trailingWs, '', 'MultiLine')
-
-              return $Json
-            }
-          }
-
           $matrix = Get-Content -Path "${{ inputs.config }}" -Raw | Remove-Comments | ConvertFrom-Json | ConvertTo-Json -Compress
           Write-Output "matrix=$($matrix)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
