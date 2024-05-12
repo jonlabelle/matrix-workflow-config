@@ -6,17 +6,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  matrix-config:
+  load-matrix:
+    name: Load matrix config
     uses: ./.github/workflows/matrix-config.yml
     with:
       config: ./.github/matrix-config/example.json
 
-  example-usage:
+  use-matrix:
     name: Use matrix config
-    needs: [matrix-config]
+    needs: [load-matrix]
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.matrix-config.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.load-matrix.outputs.matrix) }}
       fail-fast: false
     steps:
       - run: echo ${{ matrix.label }}

@@ -20,12 +20,12 @@ jobs:
   matrix-config:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix-config.outputs.matrix }}
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Set deploy matrix
-        id: set-matrix-config
+      - name: Set matrix
+        id: set-matrix
         shell: pwsh
         run: |
           function Remove-Comments {
