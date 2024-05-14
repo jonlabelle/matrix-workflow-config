@@ -14,29 +14,18 @@ Define your matrix strategy in a config file.
 {
   "include": [
     {
-      "label": "My first deploy target",
+      "label": "My first deployment target",
       "server-name": "server.name1",
-      "root-unc-path": "\\\\server.name\\E$\\www\\public",
-      "local-root-path": "E:\\www\\public",
-      "iis-path": "IIS:\\Sites\\Default Web Site",
-      // Use this setting to enable/disable a job step
       "enable": true
     },
     {
-      // This label can be used a step heading
-      "label": "My second deploy target",
+      "label": "My second deployment target",
       "server-name": "server.name2",
-      "root-unc-path": "\\\\server.name2\\Z$\\www\\public\\sub-directory",
-      "local-root-path": "Z:\\www\\public\\sub-directory",
-      "iis-path": "IIS:\\Sites\\Mysite\\MyApp",
       "enable": true
     },
     {
-      "label": "I am configured, but not enabled. So I will not be run.",
+      "label": "I am configured, but not enabled. I will not be deployed.",
       "server-name": "server.name3",
-      "root-unc-path": "\\\\server.name3\\Q$\\www\\public\\broken",
-      "local-root-path": "Q:\\www\\public\\broken",
-      "iis-path": "IIS:\\Sites\\Broken site",
       "enable": false
     }
   ]
@@ -67,6 +56,7 @@ on:
 
 jobs:
   load-matrix:
+    name: Load matrix config
     uses: jonlabelle/matrix-workflow-config/.github/workflows/matrix-config.yml@main
     with:
       config: ./.github/matrix-config/example.json
@@ -81,15 +71,8 @@ jobs:
     steps:
       - run: echo ${{ matrix.label }}
         if: ${{ matrix.enable }}
+
       - run: echo ${{ matrix.server-name }}
-        if: ${{ matrix.enable }}
-      - run: echo ${{ matrix.root-unc-path }}
-        if: ${{ matrix.enable }}
-      - run: echo ${{ matrix.local-root-path }}
-        if: ${{ matrix.enable }}
-      - run: echo ${{ matrix.iis-path }}
-        if: ${{ matrix.enable }}
-      - run: echo ${{ matrix.enable }}
         if: ${{ matrix.enable }}
 ```
 

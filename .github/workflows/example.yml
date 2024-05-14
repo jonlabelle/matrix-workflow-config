@@ -9,6 +9,8 @@ jobs:
   load-matrix:
     name: Load matrix config
     uses: ./.github/workflows/matrix-config.yml
+    # Use the following line (and remove line #11) when calling from your repo/workflow
+    # uses: jonlabelle/matrix-workflow-config/.github/workflows/matrix-config.yml@main
     with:
       config: ./.github/matrix-config/example.json
 
@@ -22,13 +24,6 @@ jobs:
     steps:
       - run: echo ${{ matrix.label }}
         if: ${{ matrix.enable }}
+
       - run: echo ${{ matrix.server-name }}
-        if: ${{ matrix.enable }}
-      - run: echo ${{ matrix.root-unc-path }}
-        if: ${{ matrix.enable }}
-      - run: echo ${{ matrix.local-root-path }}
-        if: ${{ matrix.enable }}
-      - run: echo ${{ matrix.iis-path }}
-        if: ${{ matrix.enable }}
-      - run: echo ${{ matrix.enable }}
         if: ${{ matrix.enable }}
