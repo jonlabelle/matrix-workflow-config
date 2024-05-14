@@ -1,4 +1,4 @@
-name: Matrix config
+name: matrix config
 
 on:
   workflow_call:

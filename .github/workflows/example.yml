@@ -1,4 +1,4 @@
-name: Example using matrix config
+name: example
 
 on:
   push:

@@ -1,5 +1,7 @@
 # Matrix config
 
+[![example](https://github.com/jonlabelle/matrix-workflow-config/actions/workflows/example.yml/badge.svg)](https://github.com/jonlabelle/matrix-workflow-config/actions/workflows/example.yml)
+
 > A reusable workflow for loading a job's [matrix strategy](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs) from a JSON configuration file.
 
 ## Example usage
