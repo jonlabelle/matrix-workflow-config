@@ -1,14 +1,26 @@
-name: matrix config
+name: Matrix config
 
 on:
   workflow_call:
     inputs:
       config:
         description: |
-          Path to your JSON configuration file.
-          Example: `./.github/deploy/dev.json`
+          Path to your JSON config file. Example: `.github/deploy/dev.json`
+
+          NOTE: Do not include the leading relative path qualifier `./` in your
+          path unless setting `no-sparse-checkout` to `true`. Otherwise,
+          sparse checkout will not work.
         type: string
         required: true
+
+      no-sparse-checkout:
+        description: |
+          Do not use sparse checkout to fetch the config file from the repository.
+          The default behavior is to only checkout the config file specified in the `config` input,
+          and not the entire repository.
+        type: boolean
+        required: false
+        default: false
 
     outputs:
       matrix:
@@ -19,12 +31,22 @@ on:
 
 jobs:
   matrix-config:
+    name: Matrix config
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
+      - name: Checkout config file
+        uses: actions/checkout@main
+        if: ${{ !fromJson(inputs.no-sparse-checkout) }}
+        with:
+          sparse-checkout: |
+            ${{ inputs.config }}
+          sparse-checkout-cone-mode: false
+
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
+        if: ${{ fromJson(inputs.no-sparse-checkout) }}
 
       - name: Set matrix
         id: set-matrix

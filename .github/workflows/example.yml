@@ -7,23 +7,28 @@ on:
 
 jobs:
   load-matrix:
-    name: Load matrix config
+    name: Load matrix
     uses: ./.github/workflows/matrix-config.yml
-    # Use the following line (and remove line #11) when calling from your repo/workflow
-    # uses: jonlabelle/matrix-workflow-config/.github/workflows/matrix-config.yml@main
+    # Use the following path when calling from your own repo/workflow
+    #uses: jonlabelle/matrix-workflow-config/.github/workflows/matrix-config.yml@main
     with:
-      config: ./.github/matrix-config/example.json
+      config: .github/matrix-config/example.json
+      # NOTE: Do not include the leading relative path qualifier `./` in your
+      # path unless setting `no-sparse-checkout` to `true`.
+      # Otherwise, sparse checkout will not be able to find your config file.
+
+      # Uncomment `no-sparse-checkout` below to disable sparse checkout of
+      # your config file only, and checkout the entire repository.
+      #no-sparse-checkout: true
 
   use-matrix:
-    name: Use matrix config
+    name: Use matrix on ${{ matrix.server-name }}
     needs: [load-matrix]
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJson(needs.load-matrix.outputs.matrix) }}
-      fail-fast: false
     steps:
-      - run: echo ${{ matrix.label }}
+      - name: ${{ matrix.label }}
         if: ${{ matrix.enable }}
-
-      - run: echo ${{ matrix.server-name }}
-        if: ${{ matrix.enable }}
+        run: |
+          echo "Server: ${{ matrix.server-name }}"

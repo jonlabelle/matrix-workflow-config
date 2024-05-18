@@ -16,18 +16,18 @@ Define your matrix strategy in a config file.
 {
   "include": [
     {
-      "label": "My first deployment target",
-      "server-name": "server.name1",
+      "label": "My first item",
+      "server-name": "host01",
       "enable": true
     },
     {
-      "label": "My second deployment target",
-      "server-name": "server.name2",
+      "label": "My second item",
+      "server-name": "host02",
       "enable": true
     },
     {
-      "label": "I am configured, but not enabled. I will not be deployed.",
-      "server-name": "server.name3",
+      "label": "I am configured, but not enabled. I will not be run.",
+      "server-name": "host03",
       "enable": false
     }
   ]
@@ -49,7 +49,7 @@ Here's how you call the reusable workflow from your own workflow, and load the
 configuration into your matrix strategy.
 
 ```yaml
-name: Example using matrix config
+name: example
 
 on:
   push:
@@ -58,24 +58,29 @@ on:
 
 jobs:
   load-matrix:
-    name: Load matrix config
+    name: Load matrix
     uses: jonlabelle/matrix-workflow-config/.github/workflows/matrix-config.yml@main
     with:
-      config: ./.github/matrix-config/example.json
+      config: .github/matrix-config/example.json
+      # NOTE: Do not include the leading relative path qualifier `./` in your
+      # path unless setting `no-sparse-checkout` to `true`.
+      # Otherwise, sparse checkout will not be able to find your config file.
+
+      # Uncomment `no-sparse-checkout` below to disable sparse checkout of
+      # your config file only, and checkout the entire repository.
+      #no-sparse-checkout: true
 
   use-matrix:
-    name: Use matrix config
+    name: Use matrix on ${{ matrix.server-name }}
     needs: [load-matrix]
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJson(needs.load-matrix.outputs.matrix) }}
-      fail-fast: false
     steps:
-      - run: echo ${{ matrix.label }}
+      - name: ${{ matrix.label }}
         if: ${{ matrix.enable }}
-
-      - run: echo ${{ matrix.server-name }}
-        if: ${{ matrix.enable }}
+        run: |
+          echo "Server: ${{ matrix.server-name }}"
 ```
 
 ## License
