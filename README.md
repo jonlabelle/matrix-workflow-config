@@ -61,13 +61,10 @@ jobs:
     name: Load matrix
     uses: jonlabelle/matrix-workflow-config/.github/workflows/matrix-config.yml@main
     with:
-      config: .github/matrix-config/example.json
-      # NOTE: Do not include the leading relative path qualifier `./` in your
-      # path unless setting `no-sparse-checkout` to `true`.
-      # Otherwise, sparse checkout will not be able to find your config file.
+      config: ./.github/matrix-config/example.json
 
       # Uncomment `no-sparse-checkout` below to disable sparse checkout of
-      # your config file only, and checkout the entire repository.
+      # your config file only, and checkout the entire repository
       #no-sparse-checkout: true
 
   use-matrix:
