@@ -10,13 +10,21 @@ jobs:
     name: Load matrix
     uses: ./.github/workflows/matrix-config.yml
     # Use the following path when calling from your own repo/workflow
-    #uses: jonlabelle/matrix-workflow-config/.github/workflows/matrix-config.yml@main
+    # uses: jonlabelle/matrix-workflow-config/.github/workflows/matrix-config.yml@main
     with:
       config: ./.github/matrix-config/example.json
 
+      # Additional key/value pairs to bind to each item in matrix config's `include` array.
+      extend: '{ "prop1": "value1", "prop2": "value2", "prop3": 3 }'
+
+      # If the provided value for extend is a flat array (e.g. '["one", "two", "three"]'),
+      # then the matrix is also assumed to be a flat array, and the new values will simply
+      # be appended to the existed matrix array.
+      # extend: '["one", "two", "three"]'
+
       # Uncomment `no-sparse-checkout` below to disable sparse checkout of
       # your config file only, and checkout the entire repository
-      #no-sparse-checkout: true
+      # no-sparse-checkout: true
 
   use-matrix:
     name: Use matrix on ${{ matrix.server-name }}
