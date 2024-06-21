@@ -79,7 +79,7 @@ jobs:
         id: set-matrix
         shell: pwsh
         run: |
-          $json = Get-Content -Path '${{ inputs.config }}' -Raw
+          $json = (Get-Content -Path '${{ inputs.config }}' -Raw | ConvertFrom-Json -Depth 3 -ErrorAction 'Stop' | ConvertTo-Json -Compress -ErrorAction 'Stop')
           $extend = '${{ inputs.extend }}'
 
           if (-not ([string]::IsNullOrWhiteSpace($extend))) {
@@ -102,5 +102,4 @@ jobs:
             }
           }
 
-          $matrix = ($json | ConvertFrom-Json -Depth 3 -ErrorAction 'Stop' | ConvertTo-Json -Compress -ErrorAction 'Stop')
-          Write-Output "matrix=$($matrix)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
+          Write-Output "matrix=$($json)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
