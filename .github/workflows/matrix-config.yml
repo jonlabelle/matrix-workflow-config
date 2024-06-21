@@ -15,7 +15,9 @@ on:
         description: >-
           Additional key/value pairs to bind to each item in matrix config's `include` array.
 
-          For exmple, `'{ "prop1": "value1", "prop2": "value2" }'`
+          For exmple: '{ "prop1": "value1", "prop2": "value2" }'
+
+          If a key already exists, its value will be overwritten (for each item in the include array).
 
           If the provided value for extend is a flat array (e.g. `'["one", "two", "three"]'`), then
           the matrix is also assumed to be a flat array, and the new values will simply be appended
@@ -37,8 +39,8 @@ on:
     outputs:
       matrix:
         description: >-
-          A JSON escaped string that can be used as a job's [matrix strategy](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs) configuration.
-          Be sure to convert this stringified JSON to a JSON object (using `fromJson()` expression) when injecting into your job's stategy matrix.
+          A JSON string that can be used as a job's [matrix strategy](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs) configuration.
+          Be sure parse the output to a JSON object (using `fromJson()` expression) when injecting into your job's stategy matrix.
         value: ${{ jobs.matrix-config.outputs.matrix }}
 
 jobs:

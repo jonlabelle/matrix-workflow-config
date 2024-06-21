@@ -64,6 +64,7 @@ jobs:
       config: ./.github/matrix-config/example.json
 
       # Additional key/value pairs to bind to each item in matrix config's `include` array.
+      # If a key already exists, its value will be overwritten (for each item in the include array).
       extend: '{ "prop1": "value1", "prop2": "value2", "prop3": 3 }'
 
       # If the provided value for extend is a flat array (e.g. '["one", "two", "three"]'),
