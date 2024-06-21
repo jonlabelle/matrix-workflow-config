@@ -6,17 +6,31 @@ on:
   workflow_dispatch:
 
 jobs:
+  show-matrix-config-file:
+    name: Show matrix config file contents
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout config file
+        uses: actions/checkout@main
+        with:
+          sparse-checkout: |
+            .github/matrix-config/example.json
+          sparse-checkout-cone-mode: false
+      - name: Show matrix config file contents
+        run: cat .github/matrix-config/example.json | jq '.' --color-output
+
   load-matrix:
     name: Load matrix
     uses: ./.github/workflows/matrix-config.yml
     # Use the following path when calling from your own repo/workflow
     # uses: jonlabelle/matrix-workflow-config/.github/workflows/matrix-config.yml@main
+    needs: [show-matrix-config-file]
     with:
       config: ./.github/matrix-config/example.json
 
       # Additional key/value pairs to bind to each item in matrix config's `include` array.
       # If a key already exists, its value will be overwritten (for each item in the include array).
-      extend: '{ "server-name": "overriden", "prop2": "value2", "prop3": 3 }'
+      extend: '{ "existing-key": "overridden by extend input option", "prop2": "value2", "prop3": 3 }'
 
       # If the provided value for extend is a flat array (e.g. '["one", "two", "three"]'),
       # then the matrix is also assumed to be a flat array, and the new values will simply
@@ -29,12 +43,11 @@ jobs:
 
   use-matrix:
     name: Use matrix on ${{ matrix.server-name }}
-    needs: [load-matrix]
+    needs: [show-matrix-config-file, load-matrix]
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJson(needs.load-matrix.outputs.matrix) }}
     steps:
-      - name: ${{ matrix.label }}
+      - name: Show extended matrix conig json
         if: ${{ matrix.enable }}
-        run: |
-          echo "Server: ${{ matrix.server-name }}"
+        run: echo '${{ needs.load-matrix.outputs.matrix }}' | jq '.' --color-output

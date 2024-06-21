@@ -3,17 +3,20 @@
     {
       "label": "My first item",
       "server-name": "host01",
-      "enable": true
+      "enable": true,
+      "existing-key": "this value will be overridden by a value defined in the extend input option."
     },
     {
       "label": "My second item",
       "server-name": "host02",
-      "enable": true
+      "enable": true,
+      "existing-key": "this value will be overridden by a value defined in the extend input option."
     },
     {
       "label": "I am configured, but not enabled. I will not be run.",
       "server-name": "host03",
-      "enable": false
+      "enable": false,
+      "existing-key": "this value will be overridden by a value defined in the extend input option."
     }
   ]
 }
