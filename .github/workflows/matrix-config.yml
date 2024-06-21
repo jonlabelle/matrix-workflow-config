@@ -92,13 +92,13 @@ jobs:
                 # Json has an array of include items, append the additional
                 # props to every item in the include array.
                 # ex: '{ "prop1": 1, "prop2": 2 }'
-                $json = ($json | jq ".include[] += $extend")
+                $json = ($json | jq -c ".include[] += $extend")
             }
             else
             {
                 # Assumes json is a flat array, simply append the additional values
                 # ex: '["four", "five", "six"]'
-                $json = ($json | jq ". += $extend")
+                $json = ($json | jq -c ". += $extend")
             }
           }
 
