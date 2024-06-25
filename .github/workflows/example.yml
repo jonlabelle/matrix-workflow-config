@@ -6,6 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
+  # This first job is only used for showing the matrix config file contents before loading.
+  # You don't need to setup this job in your workflow.
   show-matrix-config-file:
     name: Show matrix config file contents
     runs-on: ubuntu-latest
@@ -26,7 +28,8 @@ jobs:
     # uses: jonlabelle/matrix-workflow-config/.github/workflows/matrix-config.yml@main
     needs: [show-matrix-config-file]
     with:
-      config: ./.github/matrix-config/example.json
+      # Path to your JSON config file.
+      config: .github/matrix-config/example.json
 
       # Additional key/value pairs to bind to each item in matrix config's `include` array.
       # If a key already exists, its value will be overwritten (for each item in the include array).
@@ -37,10 +40,6 @@ jobs:
       # be appended to the existed matrix array.
       # extend: '["one", "two", "three"]'
 
-      # Uncomment `no-sparse-checkout` below to disable sparse checkout of
-      # your config file only, and checkout the entire repository
-      # no-sparse-checkout: true
-
   use-matrix:
     name: Use matrix on ${{ matrix.server-name }}
     needs: [show-matrix-config-file, load-matrix]
@@ -48,6 +47,6 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.load-matrix.outputs.matrix) }}
     steps:
-      - name: Show extended matrix conig json
+      - name: Show extended matrix config json
         if: ${{ matrix.enable }}
         run: echo '${{ needs.load-matrix.outputs.matrix }}' | jq '.' --color-output

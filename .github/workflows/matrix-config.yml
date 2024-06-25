@@ -85,19 +85,13 @@ jobs:
           $extend = '${{ inputs.extend }}'
 
           if (-not ([string]::IsNullOrWhiteSpace($extend))) {
-            # Sanitize the extend input value by running it through json parser
             $extend = ($extend | ConvertFrom-Json -Depth 1 -ErrorAction 'Stop' | ConvertTo-Json -Compress -ErrorAction 'Stop')
 
             [bool]$hasInclude = (-not ([string]::IsNullOrWhiteSpace(($json | jq -c -M '. | select(.include != null)'))))
             if ($hasInclude) {
-              # Json has an array of include items, append the additional
-              # props to every item in the include array.
-              # ex: '{ "prop1": 1, "prop2": 2 }'
               $json = ($json | jq -c -M --argjson extend $extend '.include[] += $extend')
             }
             else {
-              # Assumes json is a flat array, simply append the additional values
-              # ex: '["four", "five", "six"]'
               $json = ($json | jq -c -M --argjson extend $extend '. += $extend')
             }
           }
