@@ -81,18 +81,24 @@ jobs:
         id: set-matrix
         shell: pwsh
         run: |
-          $json = (Get-Content -Path '${{ inputs.config }}' -Raw | ConvertFrom-Json -Depth 3 -ErrorAction 'Stop' | ConvertTo-Json -Compress -ErrorAction 'Stop')
+          $ErrorActionPreference = 'Stop'
+
+          $json = (Get-Content -Path '${{ inputs.config }}' -Raw | ConvertFrom-Json -Depth 3 | ConvertTo-Json -Compress)
           $extend = '${{ inputs.extend }}'
 
           if (-not ([string]::IsNullOrWhiteSpace($extend))) {
-            $extend = ($extend | ConvertFrom-Json -Depth 1 -ErrorAction 'Stop' | ConvertTo-Json -Compress -ErrorAction 'Stop')
+            $extend = ($extend | ConvertFrom-Json -Depth 1 | ConvertTo-Json -Compress)
 
             [bool]$hasInclude = (-not ([string]::IsNullOrWhiteSpace(($json | jq -c -M '. | select(.include != null)'))))
+            if ($LastExitCode -ne 0) { exit $LastExitCode }
+
             if ($hasInclude) {
               $json = ($json | jq -c -M --argjson extend $extend '.include[] += $extend')
+              if ($LastExitCode -ne 0) { exit $LastExitCode }
             }
             else {
               $json = ($json | jq -c -M --argjson extend $extend '. += $extend')
+              if ($LastExitCode -ne 0) { exit $LastExitCode }
             }
           }
 
